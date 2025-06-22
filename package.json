@@ -4,10 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/preflight.js",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:tailwind": "node scripts/checkTailwindConfig.js",
+    "check:cdn": "node scripts/preflight.js"
   },
   "dependencies": {
     "axios": "^1.10.0",

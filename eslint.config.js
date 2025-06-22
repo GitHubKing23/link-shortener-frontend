@@ -30,4 +30,12 @@ export default [
       ],
     },
   },
+  {
+    files: ['scripts/*.js'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: { ...globals.node },
+      sourceType: 'module',
+    },
+  },
 ]
