@@ -1,12 +1,56 @@
-# React + Vite
+# Link Shortener Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains the React frontend for the link shortener application. The project uses **Vite** for bundling and **Tailwind CSS** for styling.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Shortener Form** – main page that allows users to create shortened URLs (`src/ShortenerForm.jsx`).
+- **Admin Dashboard** – protected page displaying link analytics and a click trends graph (`src/pages/AdminDashboard.jsx`).
+- **Admin Login** – form for authenticating administrators (`src/pages/AdminLogin.jsx`).
+- **404 Page** – shown when no route matches (`src/pages/NotFound.jsx`).
+- Toast notifications using `react-toastify`.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   The app will be available at `http://localhost:5173/` by default.
+3. Lint the project:
+   ```bash
+   npm run lint
+   ```
+4. Build for production:
+   ```bash
+   npm run build
+   ```
+
+## Project Structure
+
+```
+src/
+  App.jsx               # Application with routes and toasts
+  ShortenerForm.jsx     # Form for creating shortened links
+  components/
+    PrivateRoute.jsx    # Protects admin routes
+  pages/
+    AdminLogin.jsx      # Admin login form
+    AdminDashboard.jsx  # Dashboard with analytics table and chart
+    NotFound.jsx        # 404 fallback page
+```
+
+## API Expectations
+
+The Admin Dashboard expects the following endpoints:
+
+- `GET /api/links` – returns an array of links with `originalUrl`, `shortCode`, `clicks` and `createdAt`.
+- `GET /api/analytics/trend` – returns click data for the trend graph.
+- `POST /api/admin/login` – returns `{ token }` used for authentication.
+- `POST /api/shorten` – accepts `{ url }` and returns `{ shortUrl }`.
+
+Ensure the backend is running and accessible for the dashboard and login to work correctly.
