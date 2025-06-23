@@ -1,83 +1,53 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 function ShortenerForm() {
   const [url, setUrl] = useState('')
-  const [customCode, setCustomCode] = useState('')
-  const [shortCode, setShortCode] = useState('')
-  const [error, setError] = useState('')
+  const [shortUrl, setShortUrl] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault()
-    setError('')
-    setShortCode('')
-
+    setLoading(true)
     try {
-      const { data } = await axios.post('http://localhost:3000/shorten', {
-        url,
-        customCode,
-      })
-      if (data.shortCode) {
-        setShortCode(data.shortCode)
-      }
+      const res = await axios.post('/api/shorten', { url })
+      setShortUrl(res.data.shortUrl)
+      toast.success('URL shortened!')
     } catch (err) {
-      if (err.response?.data?.error) {
-        setError(err.response.data.error)
-      } else {
-        setError('An unexpected error occurred')
-      }
+      toast.error(err.response?.data?.message || 'Error shortening URL')
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div className="bg-white p-6 rounded shadow-md w-80">
+    <div className="p-4 w-full max-w-md">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="url">
-            Long URL
-          </label>
-          <input
-            id="url"
-            type="url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            className="w-full border rounded px-3 py-2"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="customCode">
-            Custom Code (optional)
-          </label>
-          <input
-            id="customCode"
-            type="text"
-            value={customCode}
-            onChange={(e) => setCustomCode(e.target.value)}
-            className="w-full border rounded px-3 py-2"
-          />
-        </div>
+        <input
+          className="w-full border p-2 rounded"
+          type="url"
+          placeholder="Enter URL"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          required
+        />
         <button
+          className="w-full bg-blue-500 text-white py-2 rounded disabled:opacity-50"
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          disabled={loading}
         >
-          Shorten
+          {loading ? 'Shortening...' : 'Shorten'}
         </button>
       </form>
-      {shortCode && (
-        <p className="mt-4 text-center">
-          Short URL:
-          <a
-            href={`http://localhost:3000/${shortCode}`}
-            className="text-blue-600 underline ml-1"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {`http://localhost:3000/${shortCode}`}
+      {shortUrl && (
+        <p className="mt-4">
+          Short URL:{' '}
+          <a href={shortUrl} className="text-blue-500">
+            {shortUrl}
           </a>
         </p>
       )}
-      {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
     </div>
   )
 }
