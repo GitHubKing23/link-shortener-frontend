@@ -8,14 +8,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-<<<<<<< ours
+    "test": "vitest",
     "preview": "vite preview",
     "check:tailwind": "node scripts/checkTailwindConfig.js",
     "check:cdn": "node scripts/preflight.js"
-=======
-    "test": "vitest",
-    "preview": "vite preview"
->>>>>>> theirs
   },
   "dependencies": {
     "axios": "^1.10.0",
